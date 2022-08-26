@@ -16,10 +16,10 @@ def promediar(v):
 def column(matrix, i):
     return [row[i] for row in matrix]
 def test():
-
+    c = 0
     duracion = 1000
-    acuerdo =  [2]#[2,4,6,8]#
-    coste_Acordado = [500]#[500,950,1300,1600]#
+    acuerdo =  [2,4,6,8]#[2]#
+    coste_Acordado = [500,950,1300,1600]#[500]#
 
     for opc in range(len(acuerdo)):
         print(f"{acuerdo[opc]} autos por {coste_Acordado[opc]}")
@@ -28,6 +28,7 @@ def test():
         costos = column(costoFinal,1)
         semanas = column(costoFinal,0)
         y = promediar(costos)
+        data.to_csv(rf'C:\Users\Usuario\AppData\Local\Programs\Python\finalSIm\FinalSim\data{opc}.csv',sep=',',index=False)
 
         print(f"Autos atendidos: {Autos_atendidos}")
         print(f"Autos despachados: {Autos_despachados}")
@@ -37,16 +38,17 @@ def test():
         print(f"costo final: {sum(costos)}\n")
         print(f"costo  prom: {y[-1]}")
 
+        plt.plot(semanas,y,label=f"{acuerdo[opc]} autos por {coste_Acordado[opc]}")
 
-        plt.plot(semanas[1:],y[1:],label=f"{acuerdo[opc]} autos por {coste_Acordado[opc]}")
         plt.xlabel("meses")
         plt.ylabel("promedio")
         plt.suptitle("Promedio costos por semana")
         plt.title("Simulacion UTN FRC")
         plt.legend()
         print(data)
-    plt.show()
 
+
+    plt.show()
 
 
 def simular(duracion=100,acuerdo=2,coste_acordado=500):
@@ -61,24 +63,26 @@ def simular(duracion=100,acuerdo=2,coste_acordado=500):
     restantes = acuerdo
 
     colaTrabajos = []
-    dic = {"Semana":[],"Cola":[],"Arribos":[],"Autos":[],"Atenciones":[],"Atendidos":[],"Despachos":[],"Despachados":[],}
+    dic = {"Semana":[],"Longitud cola":[],"Cola":[],"Arribos":[],"Autos":[],"Atenciones":[],"Atendidos":[],"Despachos":[],"Despachados":[]}
     data = pd.DataFrame(dic)
+    printer = False
+
     for semana in range(1,duracion+1):
 
-        line = pd.DataFrame({"Semana":[],"Cola":[],"Arribos":[],"Autos":[],"Atenciones":[],"Atendidos":[],"Despachos":[],"Despachados":[]})
+        line = pd.DataFrame({"Semana":[],"Longitud cola":[],"Cola":[],"Arribos":[],"Autos":[],"Atenciones":[],"Atendidos":[],"Despachos":[],"Despachados":[]})
         line.at[0,"Semana"] = semana
-        line.at[0,"Cola"] = str([i.get_nombre() for i in colaTrabajos])
-
-
+        line.at[0,"Longitud cola"] = len(colaTrabajos)
+        line["Cola"] = line["Cola"].astype(object)
+        line.at[0, "Cola"] = [i.get_nombre() for i in colaTrabajos]
 
         if semana % 4 == 0:
             restantes = acuerdo
             costoFinal.append([semana/4,coste_acordado])
 
-
-        print(f"------------------------{semana}------------------------")
-        print(f"{len(colaTrabajos)} por atender")
-        print([(ti.get_nombre(), ti.get_semana()) for ti in colaTrabajos],end="\n\n")
+        if printer:
+            print(f"------------------------{semana}------------------------")
+            print(f"{len(colaTrabajos)} por atender")
+            print([(ti.get_nombre(), ti.get_semana()) for ti in colaTrabajos],end="\n\n")
 
 
         #Cantidad de llegadas en dicha semana
@@ -86,43 +90,47 @@ def simular(duracion=100,acuerdo=2,coste_acordado=500):
         llegadas = trabajos(rnd_llegadas)
 
         line.at[0,"Arribos"] = llegadas
+        if printer:
+            print(f"llegaron: {llegadas}")
 
-
-
-
-        print(f"llegaron: {llegadas}")
         v = []
         for i in range(llegadas):
             t = Trabajo(semana)
+            colaTrabajos.append(t)
             v.append(t)
-            print(f"llego {t}")
 
-        line.at[0,"Arribos"] = str([i.get_nombre() for i in v])
-        colaTrabajos.append(v)
-        print("\n")
+        if printer:
+            print(f"llego {[t for t in v]}")
+            print("\n")
+
+        line["Autos"] = line["Autos"].astype(object)
+        line.at[0, "Autos"] = [i.get_nombre() for i in v]
+
 
 
         #Cantidad de trabajos atendidos en dicha semana
         rnd_resueltos = random.random()
         resueltos = int(uniforme(rnd_resueltos,a=3,b=7))
-        print(f"se atendieron: {resueltos}")
-        line.at[0,"Atenciones"] = resueltos
+        line.at[0, "Atenciones"] = resueltos
+        if printer:
+            print(f"se atendieron: {resueltos}")
+
+
 
         v = []
         for i in range(resueltos):
             if len(colaTrabajos) != 0:
-                print(f"se atendio {colaTrabajos[0]}")
                 v.append(colaTrabajos[0])
                 colaTrabajos.pop(0)
-
                 Autos_atendidos += 1
-        for i in range(len(v)):
-            print(type(v))
-            print("64218")
-        #line.at[0,"Atendidos"] = str([i.get_nombre() for i in v])
 
+        line["Atendidos"] = line["Atendidos"].astype(object)
+        line.at[0, "Atendidos"] = [i.get_nombre() for i in v]
 
-        print("\n")
+        if printer:
+            print(f"Se atendieron: {[vi.get_nombre() for vi in v]}")
+            print([vi.get_nombre() for vi in v])
+            print("\n")
 
 
         despachados = [xi for xi in colaTrabajos if xi.get_semana()  < semana]
@@ -130,8 +138,9 @@ def simular(duracion=100,acuerdo=2,coste_acordado=500):
         Autos_despachados += len(despachados)
 
         line.at[0,"Despachos"] = len(despachados)
-        line.at[0,"Despachados"] = str([i.get_nombre() for i in despachados])
 
+        line["Despachados"] = line["Despachados"].astype(object)
+        line.at[0, "Despachados"] = [i.get_nombre() for i in despachados]
 
         if len(despachados) <= restantes:
             restantes -= len(despachados)
@@ -160,15 +169,15 @@ def simular(duracion=100,acuerdo=2,coste_acordado=500):
 
         costoFinal.append(costo)
         """
+    if printer:
+        print(f"despachados: {len(despachados)}")
+        for b in despachados:
+            print(f"Se despacho {b}")
+        print("\n")
 
-    print(f"despachados: {len(despachados)}")
-    for b in despachados:
-        print(f"Se despacho {b}")
-    print("\n")
 
-
-    print(f"Quedaron: {len(colaTrabajos)}")
-    print("\n\n")
+        print(f"Quedaron: {len(colaTrabajos)}")
+        print("\n\n")
     return Autos_atendidos,Autos_despachados,costoFinal,despachados_en_acuerdo,despachados_sin_acuerdo,data
 
 if __name__=="__main__":
