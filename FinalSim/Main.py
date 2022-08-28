@@ -149,10 +149,11 @@ def simular(duracion=100,acuerdo=2,coste_acordado=500):
             restantes -= len(despachados)
             despachados_en_acuerdo += len(despachados)
         else:
-            restantes = 0
             costoFinal[-1][1] += (len(despachados) - restantes)*400
             despachados_en_acuerdo += restantes
             despachados_sin_acuerdo += len(despachados) - restantes
+            restantes = 0
+
         data = pd.concat([data, line], ignore_index=True)
 
 
