@@ -1,3 +1,11 @@
 # Default ignored files
 /shelf/
 /workspace.xml
+<<<<<<< HEAD
+=======
+# Datasource local storage ignored files
+/../../../../../../../../../:\Users\Usuario\AppData\Local\Programs\Python\finalSIm\.idea/dataSources/
+/dataSources.local.xml
+# Editor-based HTTP Client requests
+/httpRequests/
+>>>>>>> d389e56dd9f05ebd32e10adc27d1fe465ed5e857

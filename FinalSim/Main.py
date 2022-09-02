@@ -1,6 +1,6 @@
 import random
 import matplotlib.pyplot as plt
-import numpy as np
+import time
 import pandas as pd
 from Clases import Trabajo
 from Distribuciones import trabajos, uniforme
@@ -16,8 +16,9 @@ def promediar(v):
 def column(matrix, i):
     return [row[i] for row in matrix]
 def test():
-    c = 0
-    duracion = 1000
+    duracion = int(input("Ingrese laduracion en dias: "))
+    start = time.time()
+    duracion //= 7
     acuerdo =  [2,4,6,8]#[2]#
     coste_Acordado = [500,950,1300,1600]#[500]#
 
@@ -35,8 +36,8 @@ def test():
         print(f"Autos despachados por lo acordado:{despachados_en_acuerdo}")
         print(f"Autos despachados fuerda de lo acordado:{despachados_sin_acuerdo}")
 
-        print(f"costo final: {sum(costos)}\n")
-        print(f"costo  prom: {y[-1]}")
+        print(f"costo final: {sum(costos)}")
+        print(f"costo  prom: {y[-1]}\n")
 
         plt.plot(semanas,y,label=f"{acuerdo[opc]} autos por {coste_Acordado[opc]}")
 
@@ -45,10 +46,12 @@ def test():
         plt.suptitle("Promedio costos por semana")
         plt.title("Simulacion UTN FRC")
         plt.legend()
-        print(data)
+        #print(data)
 
 
     plt.show()
+    end = time.time()
+    print(f"DURACION: {end-start}")
 
 
 def simular(duracion=100,acuerdo=2,coste_acordado=500):
@@ -146,10 +149,11 @@ def simular(duracion=100,acuerdo=2,coste_acordado=500):
             restantes -= len(despachados)
             despachados_en_acuerdo += len(despachados)
         else:
-            restantes = 0
             costoFinal[-1][1] += (len(despachados) - restantes)*400
             despachados_en_acuerdo += restantes
             despachados_sin_acuerdo += len(despachados) - restantes
+            restantes = 0
+
         data = pd.concat([data, line], ignore_index=True)
 
 
