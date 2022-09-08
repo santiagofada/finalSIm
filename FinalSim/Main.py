@@ -15,6 +15,9 @@ def promediar(v):
     return pv
 def column(matrix, i):
     return [row[i] for row in matrix]
+
+
+
 def test():
     duracion = int(input("Ingrese laduracion en dias: "))
     start = time.time()
@@ -29,7 +32,7 @@ def test():
         costos = column(costoFinal,1)
         semanas = column(costoFinal,0)
         y = promediar(costos)
-        data.to_csv(rf'C:\Users\Usuario\AppData\Local\Programs\Python\finalSIm\FinalSim\data{opc}.csv',sep=',',index=False)
+        #data.to_csv(rf'C:\Users\Usuario\AppData\Local\Programs\Python\finalSIm\FinalSim\data{opc}.csv',sep=',',index=False)
 
         print(f"Autos atendidos: {Autos_atendidos}")
         print(f"Autos despachados: {Autos_despachados}")

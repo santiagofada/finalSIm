@@ -40,7 +40,7 @@ class PantallaIngresoDatos(QMainWindow):
         if self.ValidarCamposNoVacios():
 
 
-            Main02.simular(duracion, vectorAcuerdo, vectorCostoAcuerdo, vectorCantTrabajos
+            Main02.simular(duracion, vectorAcuerdo, vectorCostoAcuerdo, vectorCantTrabajos,
                            vectorCantSemanas, costoFueraCantAcordada)
 
 

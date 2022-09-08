@@ -19,12 +19,17 @@ def test():
     duracion = int(input("Ingrese laduracion en dias: "))
     start = time.time()
     duracion //= 7
+    trab = [5,6,7,8,9]
+    freq = [3,8,9,6,4]
     acuerdo =  [2,4,6,8]#[2]#
     coste_Acordado = [500,950,1300,1600]#[500]#
+    penalizacion = 400
+    normal = [3,7]
 
 
-
-    Autos_atendidos,Autos_despachados,costoFinal,despachados_en_acuerdo,despachados_sin_acuerdo,data = simular(duracion,acuerdo,coste_Acordado)
+    Autos_atendidos,Autos_despachados,costoFinal,despachados_en_acuerdo,despachados_sin_acuerdo,data = simular(duracion=duracion,acuerdo=acuerdo,
+                                                                                                               coste_acordado = coste_Acordado,resolver = normal
+                                                                                                               ,trab = trab,freq = freq,penalizacion = penalizacion)
     costos =[ [],[],[],[]]
 
 
@@ -35,7 +40,8 @@ def test():
         costos[opc] = column(costoFinal[opc],1)
         semanas = column(costoFinal[opc],0)
         y = promediar(costos[opc])
-        data.to_csv(rf'C:\Users\Usuario\AppData\Local\Programs\Python\finalSIm\FinalSim\data_2.csv',sep=',',index=False)
+        #data.to_csv(rf'C:\Users\Usuario\AppData\Local\Programs\Python\finalSIm\FinalSim\data_2.csv',sep=',',index=False)
+        data.to_csv(rf"C:\Users\Usuario\AppData\Local\Programs\Python\finalSIm\FinalSim\aaa.csv", sep=',', index=False)
 
         print(f"Autos atendidos: {Autos_atendidos[opc]}")
         print(f"Autos despachados: {Autos_despachados[opc]}")
@@ -58,7 +64,7 @@ def test():
     end = time.time()
     print(f"DURACION: {end-start}")
 
-def simular(duracion=100, acuerdo=(2,4,6,8), coste_acordado=(500,950,1300,1600), resolver=[3,7]):
+def simular(duracion=100, acuerdo=(2,4,6,8), coste_acordado=(500,950,1300,1600), resolver=(3,7),trab=(5, 6, 7, 8, 9), freq=(3, 8, 9, 6, 4),penalizacion =400):
 
     Autos_atendidos = [0]*len(acuerdo)
     Autos_despachados = [0]*len(acuerdo)
@@ -85,7 +91,7 @@ def simular(duracion=100, acuerdo=(2,4,6,8), coste_acordado=(500,950,1300,1600),
 
         #Cantidad de llegadas en dicha semana
         rnd_llegadas = random.random()
-        llegadas = trabajos(rnd_llegadas)
+        llegadas = trabajos(rnd_llegadas,trab = trab ,freq = freq)
         autos = []
         for i in range(llegadas):
             t = Trabajo(semana)
@@ -135,8 +141,8 @@ def simular(duracion=100, acuerdo=(2,4,6,8), coste_acordado=(500,950,1300,1600),
                 restantes[idx] -= len(despachados)
                 despachados_en_acuerdo[idx] += len(despachados)
             else:
-                costoFinal[idx][-1][1] += (len(despachados) - restantes[idx])*400
-                costoSem[idx] += (len(despachados) - restantes[idx])*400
+                costoFinal[idx][-1][1] += (len(despachados) - restantes[idx])*penalizacion
+                costoSem[idx] += (len(despachados) - restantes[idx])*penalizacion
                 despachados_en_acuerdo[idx] += restantes[idx]
                 despachados_sin_acuerdo[idx] += len(despachados) - restantes[idx]
                 restantes[idx] = 0
