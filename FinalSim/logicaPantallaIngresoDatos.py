@@ -14,11 +14,11 @@ class PantallaIngresoDatos(QMainWindow):
 
         """Cargar la GUI"""
         uic.loadUi("pantallaIngresoDatos.ui", self)
-        self.btnSimular.clicked.connect(self.simular)
+        self.btnSimular.clicked.connect(self.simulacion)
 
 
 
-    def simular(self):
+    def simulacion(self):
 
         vectorAcuerdo = [int(self.txtTA1.text()), int(self.txtTA2.text()), int(self.txtTA3.text()),
                          int(self.txtTA4.text())]
@@ -37,23 +37,29 @@ class PantallaIngresoDatos(QMainWindow):
 
         duracion = int(self.txtTiempoSimulacion.text())
 
+        distUnif = [int(self.txtUnifA.text()), int(self.txtUnifB.text())]
+
+        primeraFila = int(self.txtPrimeraFila)
+
+        """duracion=100, acuerdo=(2,4,6,8), coste_acordado=(500,950,1300,1600), 
+        resolver=(3,7),trab=(5, 6, 7, 8, 9), freq=(3, 8, 9, 6, 4),penalizacion =400"""
         if self.ValidarCamposNoVacios():
 
 
-            Main02.simular(duracion, vectorAcuerdo, vectorCostoAcuerdo, vectorCantTrabajos,
-                           vectorCantSemanas, costoFueraCantAcordada)
+            Main02.test(duracion, vectorAcuerdo, vectorCostoAcuerdo, distUnif, vectorCantTrabajos,
+                           vectorCantSemanas, costoFueraCantAcordada, primeraFila)
 
 
 
 
     def mostrarResultados(self, tablaSimulacion, cantAtendiddos, cantDespachados, acordado1,
                  noAcordado1, costo1, prom1, acordado2, noAcordado2, costo2, prom2,
-                 acordado3, noAcordado3 ,costo3, prom3, acordado4, noAcordado4,
+                 acordado3, noAcordado3, costo3, prom3, acordado4, noAcordado4,
                           costo4, prom4):
         self.pantallaResultados = PantallaResultados()
         self.pantallaResultados.mostrarResultados(tablaSimulacion, cantAtendiddos, cantDespachados, acordado1,
                  noAcordado1, costo1, prom1, acordado2, noAcordado2, costo2, prom2,
-                 acordado3, noAcordado3 ,costo3, prom3, acordado4, noAcordado4,
+                 acordado3, noAcordado3, costo3, prom3, acordado4, noAcordado4,
                           costo4, prom4)
 
         self.pantallaResultados.show()

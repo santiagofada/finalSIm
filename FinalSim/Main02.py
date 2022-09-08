@@ -1,9 +1,15 @@
 import random
+import sys
+
 import matplotlib.pyplot as plt
 import pandas as pd
+from PyQt5.QtWidgets import QApplication
+
 from Clases import Trabajo
 from Distribuciones import trabajos, uniforme
 import time
+from logicaPantallaIngresoDatos import *
+
 
 def promediar(v):
     pv = [0]*len(v)
@@ -14,9 +20,9 @@ def promediar(v):
     return pv
 def column(matrix, i):
     return [row[i] for row in matrix]
-def test():
+def test(duracion=100, acuerdo=(2,4,6,8), coste_Acordado=(500,950,1300,1600), resolver=(3,7),trab=(5, 6, 7, 8, 9), freq=(3, 8, 9, 6, 4),penalizacion =400, primeraFila=0):
 
-    duracion = int(input("Ingrese laduracion en dias: "))
+    """ duracion = int(input("Ingrese laduracion en dias: "))
     start = time.time()
     duracion //= 7
     trab = [5,6,7,8,9]
@@ -25,10 +31,12 @@ def test():
     coste_Acordado = [500,950,1300,1600]#[500]#
     penalizacion = 400
     normal = [3,7]
+    """
+
 
 
     Autos_atendidos,Autos_despachados,costoFinal,despachados_en_acuerdo,despachados_sin_acuerdo,data = simular(duracion=duracion,acuerdo=acuerdo,
-                                                                                                               coste_acordado = coste_Acordado,resolver = normal
+                                                                                                               coste_acordado = coste_Acordado,resolver = resolver
                                                                                                                ,trab = trab,freq = freq,penalizacion = penalizacion)
     costos =[ [],[],[],[]]
 
@@ -43,6 +51,7 @@ def test():
         #data.to_csv(rf'C:\Users\Usuario\AppData\Local\Programs\Python\finalSIm\FinalSim\data_2.csv',sep=',',index=False)
         data.to_csv(rf"C:\Users\Usuario\AppData\Local\Programs\Python\finalSIm\FinalSim\aaa.csv", sep=',', index=False)
 
+        ##
         print(f"Autos atendidos: {Autos_atendidos[opc]}")
         print(f"Autos despachados: {Autos_despachados[opc]}")
         print(f"Autos despachados por lo acordado:{despachados_en_acuerdo[opc]}")
@@ -62,9 +71,9 @@ def test():
 
     plt.show()
     end = time.time()
-    print(f"DURACION: {end-start}")
+    #print(f"DURACION: {end-start}")
 
-def simular(duracion=100, acuerdo=(2,4,6,8), coste_acordado=(500,950,1300,1600), resolver=(3,7),trab=(5, 6, 7, 8, 9), freq=(3, 8, 9, 6, 4),penalizacion =400):
+def simular(duracion=100, acuerdo=(2,4,6,8), coste_acordado=(500,950,1300,1600), resolver=(3,7),trab=(5, 6, 7, 8, 9), freq=(3, 8, 9, 6, 4),penalizacion =400, primeraFila=0):
 
     Autos_atendidos = [0]*len(acuerdo)
     Autos_despachados = [0]*len(acuerdo)
@@ -167,6 +176,10 @@ def simular(duracion=100, acuerdo=(2,4,6,8), coste_acordado=(500,950,1300,1600),
     return Autos_atendidos,Autos_despachados,costoFinal,despachados_en_acuerdo,despachados_sin_acuerdo,data
 
 if __name__=="__main__":
-    test()
+
+    app = QApplication(sys.argv)
+    GUI = PantallaIngresoDatos()
+    GUI.show()
+    sys.exit(app.exec_())
 
 
