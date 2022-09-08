@@ -47,11 +47,11 @@ def test(duracion=100, acuerdo=(2,4,6,8), coste_Acordado=(500,950,1300,1600), re
 
         costos[opc] = column(costoFinal[opc],1)
         semanas = column(costoFinal[opc],0)
-        y = promediar(costos[opc])
+        y = [promediar(costos[i]) for i in range(len(acuerdo)) ]
         #data.to_csv(rf'C:\Users\Usuario\AppData\Local\Programs\Python\finalSIm\FinalSim\data_2.csv',sep=',',index=False)
-        data.to_csv(rf"C:\Users\Usuario\AppData\Local\Programs\Python\finalSIm\FinalSim\aaa.csv", sep=',', index=False)
+        #data.to_csv(rf"C:\Users\Usuario\AppData\Local\Programs\Python\finalSIm\FinalSim\aaa.csv", sep=',', index=False)
 
-        ##
+        """
         print(f"Autos atendidos: {Autos_atendidos[opc]}")
         print(f"Autos despachados: {Autos_despachados[opc]}")
         print(f"Autos despachados por lo acordado:{despachados_en_acuerdo[opc]}")
@@ -59,7 +59,7 @@ def test(duracion=100, acuerdo=(2,4,6,8), coste_Acordado=(500,950,1300,1600), re
 
         print(f"costo final: {sum(costos[opc])}")
         print(f"costo  prom: {y[-1]}\n")
-
+        """
         plt.plot(semanas,y,label=f"{acuerdo[opc]} autos por {coste_Acordado[opc]}")
         plt.xlabel("semanas")
         plt.ylabel("promedio")
@@ -67,10 +67,15 @@ def test(duracion=100, acuerdo=(2,4,6,8), coste_Acordado=(500,950,1300,1600), re
         plt.title("Simulacion UTN FRC")
         plt.legend()
         #print(data[opc])
+    return data,Autos_atendidos[0],Autos_despachados[0],despachados_en_acuerdo[0],despachados_sin_acuerdo[0],sum(costos[0]),y[0],
+    despachados_en_acuerdo[1], despachados_sin_acuerdo[1], sum(costos[1]), y[1],
+    despachados_en_acuerdo[2], despachados_sin_acuerdo[2], sum(costos[2]), y[3]
+    despachados_en_acuerdo[3], despachados_sin_acuerdo[3], sum(costos[3]), y[3]
 
 
-    plt.show()
-    end = time.time()
+
+    #plt.show()
+    #end = time.time()
     #print(f"DURACION: {end-start}")
 
 def simular(duracion=100, acuerdo=(2,4,6,8), coste_acordado=(500,950,1300,1600), resolver=(3,7),trab=(5, 6, 7, 8, 9), freq=(3, 8, 9, 6, 4),penalizacion =400, primeraFila=0):
