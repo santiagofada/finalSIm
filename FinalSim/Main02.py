@@ -1,10 +1,8 @@
 import random
 import sys
-
 import matplotlib.pyplot as plt
 import pandas as pd
 from PyQt5.QtWidgets import QApplication
-
 from Clases import Trabajo
 from Distribuciones import trabajos, uniforme
 import time
@@ -20,7 +18,7 @@ def promediar(v):
     return pv
 def column(matrix, i):
     return [row[i] for row in matrix]
-def test(duracion=100, acuerdo=(2,4,6,8), coste_Acordado=(500,950,1300,1600), resolver=(3,7),trab=(5, 6, 7, 8, 9), freq=(3, 8, 9, 6, 4),penalizacion =400, primeraFila=0):
+def test(pantallaIngreso,duracion=100, acuerdo=(2,4,6,8), coste_Acordado=(500,950,1300,1600), resolver=(3,7),trab=(5, 6, 7, 8, 9), freq=(3, 8, 9, 6, 4),penalizacion =400, primeraFila=0):
 
     """ duracion = int(input("Ingrese laduracion en dias: "))
     start = time.time()
@@ -32,22 +30,27 @@ def test(duracion=100, acuerdo=(2,4,6,8), coste_Acordado=(500,950,1300,1600), re
     penalizacion = 400
     normal = [3,7]
     """
+    duracion //= 7
 
 
 
     Autos_atendidos,Autos_despachados,costoFinal,despachados_en_acuerdo,despachados_sin_acuerdo,data = simular(duracion=duracion,acuerdo=acuerdo,
                                                                                                                coste_acordado = coste_Acordado,resolver = resolver
                                                                                                                ,trab = trab,freq = freq,penalizacion = penalizacion)
-    costos =[ [],[],[],[]]
 
 
+    costos =[[],[],[],[]]
+
+    y  = [[], [], [], []]
     for opc in range(len(acuerdo)):
-        print(f"{acuerdo[opc]} autos por {coste_Acordado[opc]}")
+
+        #print(f"{acuerdo[opc]} autos por {coste_Acordado[opc]}")
 
 
         costos[opc] = column(costoFinal[opc],1)
+        y[opc] = promediar(costos[opc])
         semanas = column(costoFinal[opc],0)
-        y = [promediar(costos[i]) for i in range(len(acuerdo)) ]
+
         #data.to_csv(rf'C:\Users\Usuario\AppData\Local\Programs\Python\finalSIm\FinalSim\data_2.csv',sep=',',index=False)
         #data.to_csv(rf"C:\Users\Usuario\AppData\Local\Programs\Python\finalSIm\FinalSim\aaa.csv", sep=',', index=False)
 
@@ -60,25 +63,43 @@ def test(duracion=100, acuerdo=(2,4,6,8), coste_Acordado=(500,950,1300,1600), re
         print(f"costo final: {sum(costos[opc])}")
         print(f"costo  prom: {y[-1]}\n")
         """
-        plt.plot(semanas,y,label=f"{acuerdo[opc]} autos por {coste_Acordado[opc]}")
+        plt.plot(semanas,y[opc],label=f"{acuerdo[opc]} autos por {coste_Acordado[opc]}")
         plt.xlabel("semanas")
         plt.ylabel("promedio")
         plt.suptitle("Promedio costos por semana")
         plt.title("Simulacion UTN FRC")
         plt.legend()
-        #print(data[opc])
-    return data,Autos_atendidos[0],Autos_despachados[0],despachados_en_acuerdo[0],despachados_sin_acuerdo[0],sum(costos[0]),y[0],
-    despachados_en_acuerdo[1], despachados_sin_acuerdo[1], sum(costos[1]), y[1],
-    despachados_en_acuerdo[2], despachados_sin_acuerdo[2], sum(costos[2]), y[3]
-    despachados_en_acuerdo[3], despachados_sin_acuerdo[3], sum(costos[3]), y[3]
+
+    plt.show()
+    """
+    a = (data,Autos_atendidos[0],Autos_despachados[0],
+          despachados_en_acuerdo[0], despachados_sin_acuerdo[0], sum(costos[0]), y[0][-1],
+          despachados_en_acuerdo[1], despachados_sin_acuerdo[1], sum(costos[1]), y[1][-1],
+          despachados_en_acuerdo[2], despachados_sin_acuerdo[2], sum(costos[2]), y[2][-1],
+          despachados_en_acuerdo[3], despachados_sin_acuerdo[3], sum(costos[3]), y[3][-1])
+    for e in a:
+        print(e)
+    """
+
+    #pantallaIngreso.mostrarResultados
+    pantallaIngreso.mostrarResultados(tablaSimulacion=data, cantAtendiddos=Autos_atendidos[0],cantDespachados=Autos_despachados[0],
+                                                 acordado1=despachados_en_acuerdo[0],noAcordado1=despachados_sin_acuerdo[0], costo1=sum(costos[0]),prom1=y[0][-1],
+                                                 acordado2=despachados_en_acuerdo[1],noAcordado2=despachados_sin_acuerdo[1], costo2=sum(costos[1]),prom2=y[1][-1],
+                                                 acordado3=despachados_en_acuerdo[2], noAcordado3=despachados_sin_acuerdo[2], costo3=sum(costos[2]),prom3=y[2][-1],
+                                                 acordado4=despachados_en_acuerdo[3],noAcordado4=despachados_sin_acuerdo[3], costo4=sum(costos[3]), prom4=y[3][-1])
 
 
 
-    #plt.show()
+
+
+
+
+
+
     #end = time.time()
     #print(f"DURACION: {end-start}")
 
-def simular(duracion=100, acuerdo=(2,4,6,8), coste_acordado=(500,950,1300,1600), resolver=(3,7),trab=(5, 6, 7, 8, 9), freq=(3, 8, 9, 6, 4),penalizacion =400, primeraFila=0):
+def simular(duracion=1000, acuerdo=(2,4,6,8), coste_acordado=(500,950,1300,1600), resolver=(3,7),trab=(5, 6, 7, 8, 9), freq=(3, 8, 9, 6, 4),penalizacion =400, primeraFila=0):
 
     Autos_atendidos = [0]*len(acuerdo)
     Autos_despachados = [0]*len(acuerdo)
@@ -181,6 +202,7 @@ def simular(duracion=100, acuerdo=(2,4,6,8), coste_acordado=(500,950,1300,1600),
     return Autos_atendidos,Autos_despachados,costoFinal,despachados_en_acuerdo,despachados_sin_acuerdo,data
 
 if __name__=="__main__":
+    #test()
 
     app = QApplication(sys.argv)
     GUI = PantallaIngresoDatos()

@@ -52,6 +52,7 @@ class PantallaResultados(QMainWindow):
                  acordado3, noAcordado3 ,costo3, prom3, acordado4, noAcordado4,
                     costo4, prom4):
 
+
         self.txtAtendidos.setText(str(cantAtendiddos))
         self.txtDespachados.setText(str(cantDespachados))
 

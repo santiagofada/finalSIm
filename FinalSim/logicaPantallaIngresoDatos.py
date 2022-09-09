@@ -18,6 +18,7 @@ class PantallaIngresoDatos(QMainWindow):
 
 
 
+
     def simulacion(self):
 
         vectorAcuerdo = [int(self.txtTA1.text()), int(self.txtTA2.text()), int(self.txtTA3.text()),
@@ -39,15 +40,16 @@ class PantallaIngresoDatos(QMainWindow):
 
         distUnif = [int(self.txtUnifA.text()), int(self.txtUnifB.text())]
 
-        primeraFila = int(self.txtPrimeraFila)
+        primeraFila = int(self.txtPrimeraFila.text())
 
-        """duracion=100, acuerdo=(2,4,6,8), coste_acordado=(500,950,1300,1600), 
-        resolver=(3,7),trab=(5, 6, 7, 8, 9), freq=(3, 8, 9, 6, 4),penalizacion =400"""
+
         if self.ValidarCamposNoVacios():
 
 
-            Main02.test(duracion, vectorAcuerdo, vectorCostoAcuerdo, distUnif, vectorCantTrabajos,
+            Main02.test(self,duracion, vectorAcuerdo, vectorCostoAcuerdo, distUnif, vectorCantTrabajos,
                            vectorCantSemanas, costoFueraCantAcordada, primeraFila)
+
+
 
 
 
@@ -56,6 +58,8 @@ class PantallaIngresoDatos(QMainWindow):
                  noAcordado1, costo1, prom1, acordado2, noAcordado2, costo2, prom2,
                  acordado3, noAcordado3, costo3, prom3, acordado4, noAcordado4,
                           costo4, prom4):
+
+
         self.pantallaResultados = PantallaResultados()
         self.pantallaResultados.mostrarResultados(tablaSimulacion, cantAtendiddos, cantDespachados, acordado1,
                  noAcordado1, costo1, prom1, acordado2, noAcordado2, costo2, prom2,
